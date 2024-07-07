@@ -1,4 +1,4 @@
-function generateConfirmationCode(): string {
+export function generateConfirmationCode(): string {
   const characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const length: number = 6; // Adjust the length of the code as needed
   let code: string = "ECR";
@@ -10,8 +10,3 @@ function generateConfirmationCode(): string {
 
   return code;
 }
-
-// Generate a random confirmation code
-const confirmationCode: string = generateConfirmationCode();
-
-console.log(confirmationCode);

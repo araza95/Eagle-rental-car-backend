@@ -1,80 +1,90 @@
-// payment service
-
 // Email templates
-import {
-  IAdminMailInfo,
-  adminCarBookingTemplate,
-} from "../email/admin-email.template";
-import {
-  ICustomerMailInfo,
-  customerCarBookingTemplate,
-} from "../email/customer-email.template";
+import { adminCarBookingTemplate } from "../email/admin-email.template";
+import { customerCarBookingTemplate } from "../email/customer-email.template";
+
+// Types
+import { ADMIN_EMAIL_INTERFACE } from "../types/admin-email.interface";
+import { CUSTOMER_EMAIL_INTERFACE } from "../types/customer-email.interface";
 
 // Services
 import { sendMail } from "./mail.service";
 
-interface PaymentInfo {
-  clientEmail: string;
-  subject: string;
+// Stripe
+import Stripe from "stripe";
+
+// Dotenv
+import dotenv from "dotenv";
+
+dotenv.config();
+
+interface IProcessPayment {
+  paymentMethod: string;
+  customerEmailContent: CUSTOMER_EMAIL_INTERFACE;
+  adminEmailContent: ADMIN_EMAIL_INTERFACE;
 }
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2024-06-20",
+});
+
 export const processPayment = async ({
-  paymentInfo,
-}: {
-  paymentInfo: PaymentInfo;
-}): Promise<{ success: boolean; message: string }> => {
-  const { clientEmail, subject } = paymentInfo;
-
+  paymentMethod,
+  customerEmailContent,
+  adminEmailContent,
+}: IProcessPayment): Promise<{
+  success: boolean;
+  message: string;
+  paymentIntentClientSecret: string | null;
+  paymentIntentStatus: string | null;
+}> => {
   try {
-    const customerEmailContent: ICustomerMailInfo = {
-      fullName: "John Doe",
-      confirmationNumber: "ECR559",
-      location: "Eagle Car Rental Los Angeles",
-      pickupDateTime: "06/06/2024 5:00pm",
-      dropOffDateTime: "06/10/2024 5:00pm",
-      vehicleType: "Mid Size Car",
-      additionalDrivers: "0",
-      underageDriver: "No",
-      internationalDriver: "No",
-      additionalRequests: "No",
-      lastFourCardNumber: "9500",
-    };
+    console.log(
+      "🚀 ~ customerEmailContent.rateQuoted:",
+      customerEmailContent.rateQuoted
+    );
+    // charge user for car booking using stripe
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: customerEmailContent.rateQuoted * 100,
+      currency: "usd",
+      payment_method: paymentMethod,
+      confirm: true,
+      receipt_email: customerEmailContent.email,
+      return_url: "https://eaglerentalcar.com/",
+      metadata: {
+        confirmationCode: customerEmailContent.confirmationNumber,
+      },
+    });
 
-    const adminEmailContent: IAdminMailInfo = {
-      confirmationNumber: "ECR000001",
-      name: "John Doe",
-      phoneNumber: "123-456-7890",
-      email: "johndoe@example.com",
-      location: "Eagle Car Rental Los Angeles",
-      pickupDateTime: "06/06/2024 5:00pm",
-      dropOffDateTime: "06/10/2024 5:00pm",
-      rateQuoted: "316",
-      vehicleType: "Mid Size Car",
-      additionalDrivers: "0",
-      underageDriver: "No",
-      internationalDriver: "No",
-      additionalRequests: "No",
-      lastFourCardNumber: "9500",
-    };
+    if (paymentIntent.status !== "succeeded") {
+      throw new Error("Failed to process payment");
+    }
 
     // Send email to client
-    await sendMail({
-      //alihaiderizvi.you@gmail.com
+    sendMail({
+      // to: customerEmailContent.email,
       to: "alihaiderizvi.you@gmail.com",
-      subject,
+      subject: `
+        Booking Confirmation - ${customerEmailContent.vehicleType} - ${customerEmailContent.confirmationNumber}
+      `,
       html: customerCarBookingTemplate(customerEmailContent),
     });
 
     // Send email to admin
-    await sendMail({
+    sendMail({
       //   to: process.env.CLIENT_EMAIL as string,
       to: "alihaiderizvi.you@gmail.com",
-      subject,
+      subject: " Booking Confirmation - New Car Booking",
       html: adminCarBookingTemplate(adminEmailContent),
     });
 
-    return { success: true, message: "Emails sent successfully" };
+    return {
+      success: true,
+      message: "Emails sent successfully",
+      paymentIntentClientSecret: paymentIntent.client_secret,
+      paymentIntentStatus: paymentIntent.status,
+    };
   } catch (error) {
+    console.log({ error });
     throw new Error("Failed to process payment and send emails");
   }
 };

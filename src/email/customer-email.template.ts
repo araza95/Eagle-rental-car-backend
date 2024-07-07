@@ -1,16 +1,4 @@
-export interface ICustomerMailInfo {
-  fullName: string;
-  confirmationNumber: string;
-  location: string;
-  pickupDateTime: string;
-  dropOffDateTime: string;
-  vehicleType: string;
-  additionalDrivers: string;
-  underageDriver: string;
-  internationalDriver: string;
-  additionalRequests: string;
-  lastFourCardNumber: string;
-}
+import { CUSTOMER_EMAIL_INTERFACE } from "../types/customer-email.interface";
 
 /**
  *
@@ -56,7 +44,7 @@ export const customerCarBookingTemplate = ({
   internationalDriver,
   additionalRequests,
   lastFourCardNumber,
-}: ICustomerMailInfo): string => {
+}: CUSTOMER_EMAIL_INTERFACE): string => {
   return `<!DOCTYPE html>
         <html lang="en">
         <head>

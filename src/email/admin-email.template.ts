@@ -1,19 +1,4 @@
-export interface IAdminMailInfo {
-  confirmationNumber: string;
-  name: string;
-  phoneNumber: string;
-  email: string;
-  location: string;
-  pickupDateTime: string;
-  dropOffDateTime: string;
-  rateQuoted: string;
-  vehicleType: string;
-  additionalDrivers: string;
-  underageDriver: string;
-  internationalDriver: string;
-  additionalRequests: string;
-  lastFourCardNumber: string;
-}
+import { ADMIN_EMAIL_INTERFACE } from "../types/admin-email.interface";
 
 /**
  *
@@ -65,9 +50,9 @@ export const adminCarBookingTemplate = ({
   additionalDrivers,
   underageDriver,
   internationalDriver,
-  additionalRequests,
+  additionalComments,
   lastFourCardNumber,
-}: IAdminMailInfo): string => {
+}: ADMIN_EMAIL_INTERFACE): string => {
   return `<!DOCTYPE html>
       <html lang="en">
       <head>
@@ -133,7 +118,7 @@ export const adminCarBookingTemplate = ({
                   <p><span class="bold">Additional Drivers:</span> ${additionalDrivers}</p>
                   <p><span class="bold">Underage Driver:</span> ${underageDriver}</p>
                   <p><span class="bold">International Driver:</span> ${internationalDriver}</p>
-                  <p><span class="bold">Additional Requests comments or requests:</span> ${additionalRequests}</p>
+                  <p><span class="bold">Additional Requests comments or requests:</span> ${additionalComments}</p>
               </div>
               <div class="info">
                   <p><span class="bold">Last four # of card used for deposit:</span> #${lastFourCardNumber}</p>
