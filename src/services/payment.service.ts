@@ -58,7 +58,7 @@ export const processPayment = async ({
     };
 
     // Send email to client
-    sendMail({
+    await sendMail({
       //alihaiderizvi.you@gmail.com
       to: "alihaiderizvi.you@gmail.com",
       subject,
@@ -66,7 +66,7 @@ export const processPayment = async ({
     });
 
     // Send email to admin
-    sendMail({
+    await sendMail({
       //   to: process.env.CLIENT_EMAIL as string,
       to: "alihaiderizvi.you@gmail.com",
       subject,
