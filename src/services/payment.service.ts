@@ -59,7 +59,8 @@ export const processPayment = async ({
 
     // Send email to client
     sendMail({
-      to: "alihadierizvi.you@gmail.com",
+      //alihaiderizvi.you@gmail.com
+      to: "alihaiderizvi.you@gmail.com",
       subject,
       html: customerCarBookingTemplate(customerEmailContent),
     });
@@ -67,7 +68,7 @@ export const processPayment = async ({
     // Send email to admin
     sendMail({
       //   to: process.env.CLIENT_EMAIL as string,
-      to: "alihadierizvi.you@gmail.com",
+      to: "alihaiderizvi.you@gmail.com",
       subject,
       html: adminCarBookingTemplate(adminEmailContent),
     });
