@@ -1,4 +1,4 @@
-interface MailInfo {
+export interface IAdminMailInfo {
   confirmationNumber: string;
   name: string;
   phoneNumber: string;
@@ -67,7 +67,7 @@ export const adminCarBookingTemplate = ({
   internationalDriver,
   additionalRequests,
   lastFourCardNumber,
-}: MailInfo): string => {
+}: IAdminMailInfo): string => {
   return `<!DOCTYPE html>
       <html lang="en">
       <head>

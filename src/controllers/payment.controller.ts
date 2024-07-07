@@ -3,10 +3,10 @@ import { Request, Response } from "express";
 import { processPayment } from "../services/payment.service";
 
 export const handlePayment = async (req: Request, res: Response) => {
-  const { clientEmail, adminEmail, subject, message } = req.body;
+  const { clientEmail, subject } = req.body;
 
   try {
-    const paymentInfo = { clientEmail, adminEmail, subject, message };
+    const paymentInfo = { clientEmail, subject };
     const result = await processPayment({ paymentInfo });
     res.status(200).json(result);
   } catch (error: any) {

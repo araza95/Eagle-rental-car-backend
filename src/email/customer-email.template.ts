@@ -1,4 +1,4 @@
-interface CustomerMailInfo {
+export interface ICustomerMailInfo {
   fullName: string;
   confirmationNumber: string;
   location: string;
@@ -56,7 +56,7 @@ export const customerCarBookingTemplate = ({
   internationalDriver,
   additionalRequests,
   lastFourCardNumber,
-}: CustomerMailInfo): string => {
+}: ICustomerMailInfo): string => {
   return `<!DOCTYPE html>
         <html lang="en">
         <head>
