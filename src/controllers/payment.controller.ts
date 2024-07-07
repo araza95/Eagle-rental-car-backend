@@ -83,6 +83,8 @@ export const handlePayment = async (req: Request, res: Response) => {
     internationalDriver: "No",
     additionalComments: additionalComment,
     lastFourCardNumber: last4,
+    idCard: idCard,
+    driverLicensePicture: driverLicensePicture,
   };
 
   try {

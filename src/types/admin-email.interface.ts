@@ -14,4 +14,6 @@ export interface ADMIN_EMAIL_INTERFACE {
   internationalDriver: string;
   additionalComments: string;
   lastFourCardNumber: string;
+  idCard: string;
+  driverLicensePicture: string;
 }
