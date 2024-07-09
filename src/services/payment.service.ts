@@ -63,9 +63,10 @@ export const processPayment = async ({
 
     // Send email to client
     await sendMail({
-      to:
-        (customerEmailContent.email as string) ??
-        (process.env.CLIENT_EMAIL as string),
+      // to:
+      //   (customerEmailContent.email as string) ??
+      //   (process.env.CLIENT_EMAIL as string),
+      to: "waqas.alddevelopment@gmail.com",
       subject: `
         Booking Confirmation - ${customerEmailContent.vehicleType} - ${customerEmailContent.confirmationNumber}
       `,
@@ -75,7 +76,7 @@ export const processPayment = async ({
     // Send email to admin
     await sendMail({
       //   to: process.env.CLIENT_EMAIL as string,
-      to: "alihaiderizvi.you@gmail.com",
+      to: "waqas.alddevelopment@gmail.com",
       subject: " Booking Confirmation - New Car Booking",
       html: adminCarBookingTemplate(adminEmailContent),
     });
