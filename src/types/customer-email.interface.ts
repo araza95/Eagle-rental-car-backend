@@ -13,4 +13,5 @@ export interface CUSTOMER_EMAIL_INTERFACE {
   additionalRequests: string;
   lastFourCardNumber: string;
   rateQuoted: number;
+  vehiclePicture: string;
 }

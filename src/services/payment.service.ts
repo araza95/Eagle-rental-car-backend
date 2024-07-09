@@ -55,12 +55,14 @@ export const processPayment = async ({
       },
     });
 
+    console.log("🚀 ~ paymentIntent:", paymentIntent);
+
     if (paymentIntent.status !== "succeeded") {
       throw new Error("Failed to process payment");
     }
 
     // Send email to client
-    sendMail({
+    await sendMail({
       // to: customerEmailContent.email,
       to: "alihaiderizvi.you@gmail.com",
       subject: `
@@ -70,7 +72,7 @@ export const processPayment = async ({
     });
 
     // Send email to admin
-    sendMail({
+    await sendMail({
       //   to: process.env.CLIENT_EMAIL as string,
       to: "alihaiderizvi.you@gmail.com",
       subject: " Booking Confirmation - New Car Booking",

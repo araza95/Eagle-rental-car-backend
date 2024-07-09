@@ -16,4 +16,5 @@ export interface ADMIN_EMAIL_INTERFACE {
   lastFourCardNumber: string;
   idCard: string;
   driverLicensePicture: string;
+  vehiclePicture: string;
 }

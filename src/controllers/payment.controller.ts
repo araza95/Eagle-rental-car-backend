@@ -4,6 +4,7 @@ import { processPayment } from "../services/payment.service";
 import { CUSTOMER_EMAIL_INTERFACE } from "../types/customer-email.interface";
 import { ADMIN_EMAIL_INTERFACE } from "../types/admin-email.interface";
 import { generateConfirmationCode } from "../utils/generateConfirmationCode";
+import { CalculateCarQuote } from "../utils/calculateCarQuote";
 
 export const handlePayment = async (req: Request, res: Response) => {
   console.log("🚀 ~ handlePayment ~ req.body:", req.body);
@@ -25,30 +26,24 @@ export const handlePayment = async (req: Request, res: Response) => {
 
   const { pickupDate, pickupTime, dropoffDate, dropoffTime } = duration;
 
-  const { dayCharges, description } = vehicle;
+  const { dayCharges, description, image } = vehicle;
 
   const { count } = addtional;
 
-  const { idCard } = ageDetail;
-
+  const { idCard, age } = ageDetail;
   const pickupDateTime = new Date(`${pickupDate}T${pickupTime}`);
 
   const dropOffDateTime = new Date(`${dropoffDate}T${dropoffTime}`);
 
-  // Calculate the difference in milliseconds
-  const timeDifference = dropOffDateTime.getTime() - pickupDateTime.getTime();
-
-  // Convert milliseconds to days
-  const no_of_days = Number(Math.ceil(timeDifference / (1000 * 3600 * 24)));
-
-  console.log("🚀 ~ handlePayment ~ no_of_days:", no_of_days);
-
-  // BAD Approach: I am doing this because the FRONTEND is not sending the correct data.
-  const parsedDayPrice = dayCharges.slice(1);
-
-  const rate_quote = Math.ceil(Number(parsedDayPrice)) * Number(no_of_days);
+  const rate_quote = CalculateCarQuote({
+    pickupDateTime,
+    dropOffDateTime,
+    dayCharges,
+  });
 
   const confirmationCode: string = generateConfirmationCode();
+
+  console.log("🚀 ~ handlePayment ~ rate_quote:", rate_quote);
 
   const customerEmailContent: CUSTOMER_EMAIL_INTERFACE = {
     confirmationNumber: confirmationCode,
@@ -60,11 +55,12 @@ export const handlePayment = async (req: Request, res: Response) => {
     dropOffDateTime: dropOffDateTime,
     vehicleType: description,
     additionalDrivers: count,
-    underageDriver: idCard ? "Yes" : "No",
+    underageDriver: age === "25+" ? "No" : "Yes",
     internationalDriver: "No",
     additionalRequests: "No",
     rateQuoted: rate_quote,
     lastFourCardNumber: last4,
+    vehiclePicture: image,
   };
 
   const adminEmailContent: ADMIN_EMAIL_INTERFACE = {
@@ -85,6 +81,7 @@ export const handlePayment = async (req: Request, res: Response) => {
     lastFourCardNumber: last4,
     idCard: idCard,
     driverLicensePicture: driverLicensePicture,
+    vehiclePicture: image,
   };
 
   try {
