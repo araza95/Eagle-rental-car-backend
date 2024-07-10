@@ -44,7 +44,7 @@ export const processPayment = async ({
     );
     // charge user for car booking using stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: customerEmailContent.rateQuoted * 100,
+      amount: 20000, // 200 dollars in cents
       currency: "usd",
       payment_method: paymentMethod,
       confirm: true,
@@ -52,6 +52,8 @@ export const processPayment = async ({
       return_url: "https://eaglerentalcar.com/",
       metadata: {
         confirmationCode: customerEmailContent.confirmationNumber,
+        customerEmail: customerEmailContent?.email ?? "N/A",
+        customerName: customerEmailContent?.fullName ?? "N/A",
       },
     });
 
@@ -67,6 +69,7 @@ export const processPayment = async ({
       //   (customerEmailContent.email as string) ??
       //   (process.env.CLIENT_EMAIL as string),
       to: "nathan.alddevelopment@gmail.com",
+      // to: "alihaiderizvi.you@gmail.com",
       subject: `
         Booking Confirmation - ${customerEmailContent.vehicleType} - ${customerEmailContent.confirmationNumber}
       `,
@@ -75,6 +78,7 @@ export const processPayment = async ({
 
     // Send email to admin
     await sendMail({
+      // to: "alihaiderizvi.you@gmail.com",
       //   to: process.env.CLIENT_EMAIL as string,
       to: "waqas.alddevelopment@gmail.com",
       subject: " Booking Confirmation - New Car Booking",
