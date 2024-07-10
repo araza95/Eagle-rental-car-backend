@@ -66,7 +66,7 @@ export const processPayment = async ({
       // to:
       //   (customerEmailContent.email as string) ??
       //   (process.env.CLIENT_EMAIL as string),
-      to: "waqas.alddevelopment@gmail.com",
+      to: "nathan.alddevelopment@gmail.com",
       subject: `
         Booking Confirmation - ${customerEmailContent.vehicleType} - ${customerEmailContent.confirmationNumber}
       `,
