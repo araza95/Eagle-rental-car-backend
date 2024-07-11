@@ -65,22 +65,20 @@ export const processPayment = async ({
 
     // Send email to client
     await sendMail({
-      // to:
-      //   (customerEmailContent.email as string) ??
-      //   (process.env.CLIENT_EMAIL as string),
-      to: "nathan.alddevelopment@gmail.com",
+      to:
+        (customerEmailContent.email as string) ??
+        (process.env.CLIENT_EMAIL as string),
       // to: "alihaiderizvi.you@gmail.com",
       subject: `
-        Booking Confirmation - ${customerEmailContent.vehicleType} - ${customerEmailContent.confirmationNumber}
+        Booking Confirmation - ${customerEmailContent.vehicleType} - ${customerEmailContent.confirmationNumber} 
       `,
       html: customerCarBookingTemplate(customerEmailContent),
     });
 
     // Send email to admin
     await sendMail({
+      to: process.env.CLIENT_EMAIL as string,
       // to: "alihaiderizvi.you@gmail.com",
-      //   to: process.env.CLIENT_EMAIL as string,
-      to: "waqas.alddevelopment@gmail.com",
       subject: " Booking Confirmation - New Car Booking",
       html: adminCarBookingTemplate(adminEmailContent),
     });
