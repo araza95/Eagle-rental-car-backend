@@ -109,7 +109,7 @@ export const customerCarBookingTemplate = ({
                 <p>Thank you for booking with Eagle Car Rental!</p>
                 <div class="info">
                     <p><span class="bold">Address:</span> 1100 W Florence Ave, Suite #B, Inglewood, CA 90301</p>
-                    <p><span class="bold">Phone Number:</span> Cell: (310) 294-6980 / Landline: (424) 331-50</p>
+                    <p><span class="bold">Phone Number:</span> Cell: (310) 294-6980</p>
                 </div>
                 <div class="footer">
                     <p>&copy; 2024 Eagle Car Rental. All rights reserved.</p>
